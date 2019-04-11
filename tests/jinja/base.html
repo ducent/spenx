@@ -1,0 +1,15 @@
+html
+  head
+    title {{title}}
+    style(href='style.css', rel='stylesheet')
+  body
+    ul.sidebar
+      {% for link in links %}
+      li
+        a.sidebar__nav-item(href='/{{link}}') {{link}}
+      {% endfor %}
+    #content
+      {% block content %}{% endblock %}
+
+    footer
+      {% block footer %}{% endblock %}

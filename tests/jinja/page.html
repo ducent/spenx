@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+form(action='/signup')
+  input.control(type='text', required=true)
+  input.control(type='password')
+
+  button(type='submit') Sign up!
+{% endblock %}
+{% block footer %}
+p
+  small This is the footer
+{% endblock %}
