@@ -17,7 +17,7 @@ Tiny template parser which will convert a `pugjs <https://github.com/kakulukia/p
 
 In spenx, statements, like conditions and loops, are not processed and outputted "as it" to be processed by the template engine you wish to use.
 
-At the time being, only Jinja2 has been tested but adding support for anything else should be easy.
+At the time being, only Jinja2 and Mako has been tested but adding support for anything else should be easy.
 
 Why another parser?
 -------------------
