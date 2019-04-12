@@ -16,6 +16,46 @@ This is why the parser is defined using `Arpeggio <https://github.com/textX/Arpe
 
 The spenx code is really tiny, check it yourself!
 
+Installation
+------------
+
+.. code-block:: console
+
+  $ pip install spenx
+
+Usage
+-----
+
+Using spenx is fairly easy:
+
+.. code-block:: python
+
+  from spenx import Parser
+
+  # Without backend
+  parser = Parser()
+
+  parser.parse("""
+  p Hello world
+  """)
+
+  # => <p>Hello world</p>
+
+  # Using jinja2
+  from spenx.ext.jinja import Spenx
+  from jinja import Environment
+
+  env = Environment(
+    # Common jinja parameters
+    extensions=[Spenx], # And the spenx extension
+  )
+
+  # And use env.get_template and render as usual
+
+  # Using mako
+  from spenx.ext.mako import preprocessor
+  mako.template.Template("p Hello world", preprocessor=preprocessor)
+
 Syntax
 ------
 

@@ -1,0 +1,19 @@
+| <!DOCTYPE html>
+html
+  head
+    <%
+      title_from = ' from Mako template!'
+    %>
+    title ${title + title_from}
+  body
+    ul.sidebar
+      % for link in links:
+      li
+        a.sidebar__nav-item(href='/${link}') ${link}
+      % endfor
+    #content
+      <%block name="content">
+      </% block>
+
+    footer
+      <%block name="footer" />

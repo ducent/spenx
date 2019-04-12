@@ -2,7 +2,7 @@ from arpeggio.cleanpeg import ParserPEG, visit_parse_tree
 from spenx.visitor import HtmlVisitor
 
 JINJA_STATEMENT = 'indent? r"{.+}" EOL?'
-MAKO_STATEMENT = 'indent? (r"<%[\w\W]*%>" / r"%.*") EOL?'
+MAKO_STATEMENT = 'indent? (r"<%[\w\W]*%>" / r"</?%.*>" / r"%.*") EOL?'
 
 class Parser(ParserPEG):
   """Inherits from ParserPEG to define the rules made to support a PUG like

@@ -1,0 +1,12 @@
+<%inherit file="base.html"/>
+<%block name="content">
+form(action='/signup')
+  input.control(type='text', required)
+  input.control(type='password')
+
+  button(type='submit') Sign up!
+</%block>
+<%block name="footer">
+p
+  small This is the footer
+</%block>
