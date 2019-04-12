@@ -2,9 +2,9 @@ language: python
 python:
   - "3.6"
 install:
-  - pip install python-coveralls nosexcover
+  - pip install codecov nosexcover
   - pip install -e ."[test]"
 script:
   - python -m nose --with-doctest --with-xcoverage --cover-package=spenx
 after_success:
-  - coveralls
+  - codecov
