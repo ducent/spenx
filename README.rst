@@ -1,11 +1,11 @@
-spenx |travis| |coveralls| |pypi| |license|
+spenx |travis| |cover| |pypi| |license|
 ===========================================
 
 .. |travis| image:: https://travis-ci.org/ducent/spenx.svg?branch=master
     :target: https://travis-ci.org/ducent/spenx
 
-.. |coveralls| image:: https://coveralls.io/repos/github/ducent/spenx/badge.svg?branch=master
-    :target: https://coveralls.io/github/ducent/spenx?branch=master
+.. |cover| image:: https://codecov.io/gh/ducent/spenx/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/ducent/spenx
 
 .. |pypi| image:: https://badge.fury.io/py/spenx.svg
     :target: https://badge.fury.io/py/spenx
