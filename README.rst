@@ -1,5 +1,17 @@
-spenx
-=====
+spenx |travis| |coveralls| |pypi| |license|
+===========================================
+
+.. |travis| image:: https://travis-ci.org/ducent/spenx.svg?branch=master
+    :target: https://travis-ci.org/ducent/spenx
+
+.. |coveralls| image:: https://coveralls.io/repos/github/ducent/spenx/badge.svg?branch=master
+    :target: https://coveralls.io/github/ducent/spenx?branch=master
+
+.. |pypi| image:: https://badge.fury.io/py/spenx.svg
+    :target: https://badge.fury.io/py/spenx
+
+.. |license| image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
+    :target: https://www.gnu.org/licenses/gpl-3.0
 
 Tiny template parser which will convert a `pugjs <https://github.com/kakulukia/pypugjs>`_ like syntax to HTML with the help of popular template engine (Jinja2 only at the time being).
 
