@@ -4,15 +4,15 @@ import os
 with open('README.rst', encoding='utf-8') as f:
   readme = f.read()
 
-with open('pypag/version.py') as f:
+with open('spenx/version.py') as f:
   version = f.readline().strip()[15:-1]
 
 setup(
-  name='pypag',
+  name='spenx',
   version=version,
-  description='Python 3 template parser to generate HTML from a pug/jade like syntax with Jinja2 support',
+  description='Python 3 template parser to generate HTML from a pug/jade like syntax',
   long_description=readme,
-  url='https://github.com/ducent/pypag',
+  url='https://github.com/ducent/spenx',
   author='Julien LEICHER',
   license='GPL-3.0',
   packages=find_packages(),

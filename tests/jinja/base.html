@@ -9,7 +9,8 @@ html
         a.sidebar__nav-item(href='/{{link}}') {{link}}
       {% endfor %}
     #content
-      {% block content %}{% endblock %}
+      {% block content %}
+      {% endblock %}
 
     footer
       {% block footer %}{% endblock %}

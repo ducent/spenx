@@ -1,7 +1,10 @@
 from arpeggio.cleanpeg import ParserPEG, visit_parse_tree
-from pypag.visitor import PagVisitor
+from spenx.visitor import HtmlVisitor
 
-class PagParser(ParserPEG):
+JINJA_STATEMENT = 'indent? r"{.+}" EOL?'
+MAKO_STATEMENT = 'indent? (r"<%[\w\W]*%>" / r"%.*") EOL?'
+
+class Parser(ParserPEG):
   """Inherits from ParserPEG to define the rules made to support a PUG like
   syntax for writing templates easily.
 
@@ -12,7 +15,7 @@ class PagParser(ParserPEG):
   use your favorite backend capabilities.
   """
 
-  def __init__(self, statement_expression='indent? "{" r\'[^}]+\' "}" EOL?'):
+  def __init__(self, statement_expression=JINJA_STATEMENT):
     """Initialize a new parser where statements will be kept intact.
 
     Args:
@@ -23,7 +26,7 @@ class PagParser(ParserPEG):
 root = (empty_line / multiline_string / expression / definition)+ EOF
 
 EOL = r'\\n|\\r\\n'
-indent = r'[ ]+'
+indent = r'\s+'
 spaces = r'[ ]*'
 empty_line = spaces EOL
 
@@ -34,8 +37,8 @@ tag = r'[^ \\n\\r.#(]+'
 
 attribute_name = r'[^=)]+'
 bool = r'true|false|True|False'
-string = r"'[^']+'|`[^`]+`"
-number = r'[0-9.]+'
+string = r"'.+?'|`.+?`"
+number = r'[\d.]+'
 attribute_value = (bool / string / number)
 attribute = spaces EOL? spaces attribute_name r'=?' attribute_value? spaces r',?' spaces EOL?
 attributes = "(" attribute+ ")"
@@ -51,4 +54,4 @@ multiline_string = indent? "| " text EOL
     Args:
       source (str): Source to be parsed
     """
-    return visit_parse_tree(super().parse(source), PagVisitor())
+    return visit_parse_tree(super().parse(source), HtmlVisitor())

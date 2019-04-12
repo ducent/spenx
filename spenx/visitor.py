@@ -1,6 +1,6 @@
 from arpeggio.peg import PTNodeVisitor
 
-class PagVisitor(PTNodeVisitor):
+class HtmlVisitor(PTNodeVisitor):
   """Tree visitor used to constructs the HTML output based on the DSL.
 
   The syntax is pretty easy and the parser is tight but it should cover the vast
@@ -46,19 +46,9 @@ class PagVisitor(PTNodeVisitor):
     if klass:
       yield ' class="%s"' % ' '.join(klass)
 
-    yield '>' # Closes the current opening tag
-
     # And yield any inner text
     if children.text:
-      yield ''.join(children.text)
-
-  def _close_tag(self, tag):
-    """Close the given tag. In the future, we may have to deal with self-closing tags.
-
-    Args:
-      tag (string): Tag to close
-    """
-    return '</%s>' % tag
+      yield '>%s' % ''.join(children.text)
 
   def _close_parent_tags(self, indent):
     """Close any tags that are higher in the tree that the current indent level.
@@ -66,9 +56,24 @@ class PagVisitor(PTNodeVisitor):
     Args:
       indent (int): Current number of indentation
     """
+    # Retrieve the last known indent level
+    last_indent, _, has_child = self._tag_stack[-1] if self._tag_stack else (0, None, False)
+
+    # We have a superior nesting so the last opened tag now has children.
+    # If it doesn't have text, it means we should close the opening tag now.
+    if indent > last_indent and not has_child:
+      yield '>'
+
     while(self._tag_stack):
       if self._tag_stack[-1][0] >= indent:
-        yield self._close_tag(self._tag_stack.pop()[1])
+        tag_indent, tag, has_child = self._tag_stack.pop()
+
+        if last_indent == tag_indent and not has_child: # Handle self closing tags!
+          yield ' />'
+        else:
+          yield '</%s>' % tag
+
+        last_indent = tag_indent
       else:
         break
 
@@ -80,8 +85,7 @@ class PagVisitor(PTNodeVisitor):
     return (children.attribute_name[0], children.attribute_value[0] if children.attribute_value else True)
 
   def visit_EOF(self, node, children):
-    while self._tag_stack:
-      yield self._close_tag(self._tag_stack.pop()[1])
+    yield from self._close_parent_tags(0)
 
   def visit_tag(self, node, children):
     return node.value
@@ -106,21 +110,31 @@ class PagVisitor(PTNodeVisitor):
 
   def visit_multiline_string(self, node, children):
     yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
+    # This one is a bit tricky! We have match a multiline string so we want to
+    # make sure the last remining tag (the parent one) will let know others it has at least one child
+    # now so the closing tag will match correctly.
+    if self._tag_stack:
+      self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
     yield children.text[0]
 
   def visit_expression(self, node, children):
     yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
-    # Expression are left untouched, just take only the part in which we have some interest
-    yield ''.join([n.value for n in node if n.rule_name not in ['indent', 'EOL']])
+    # Same as multiline string, especially when an expression is the last member
+    if self._tag_stack:
+      self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
+    # Expression are left untouched, just dismiss indents and EOL
+    yield '\n%s\n' % ''.join([n.value for n in node if n.rule_name not in ['indent', 'EOL']])
 
   def visit_definition(self, node, children):
     indent = children.indent[0] if children.indent else 0
     tag = children.tag[0] if children.tag else 'div'
 
     yield from self._close_parent_tags(indent)
-    self._tag_stack.append((indent, tag))
+
+    # Append the current tag to the stack to keep track of what should be closed
+    self._tag_stack.append((indent, tag, len(children.text) > 0))
 
     yield from self._open_tag(tag, children)
   
   def visit_root(self, node, children):
-    return ''.join([''.join(c) for c in children])
+    return ''.join([''.join(c) for c in children]).strip()

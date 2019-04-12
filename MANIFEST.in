@@ -1,2 +1,2 @@
 include README.rst
-include pypag/version.py
+include spenx/version.py

@@ -1,9 +1,9 @@
 from sure import expect
-from pypag.parser import PagParser
+from spenx.parser import Parser
 
-parser = PagParser()
+parser = Parser()
 
-class TestPagParser:
+class TestParser:
 
   def test_it_should_handle_basic_tags_nesting(self):
     html = parser.parse("""
@@ -11,11 +11,12 @@ body
   p
     a
       small With some text
+      img
   footer
     p The footer
 """)
 
-    expect(html).to.equal('<body><p><a><small>With some text</small></a></p><footer><p>The footer</p></footer></body>')
+    expect(html).to.equal('<body><p><a><small>With some text</small><img /></a></p><footer><p>The footer</p></footer></body>')
 
   def test_it_should_handle_id_and_classes_with_shortcuts(self):
     html = parser.parse("""
@@ -52,14 +53,14 @@ head
   script(src='/somewhere/else.js', type=`text/javascript`)
 """)
 
-    expect(html).to.equal('<head><script src="/somewhere/else.js" type="text/javascript"></script></head>')
+    expect(html).to.equal('<head><script src="/somewhere/else.js" type="text/javascript" /></head>')
   
   def test_it_should_handle_number_attributes(self):
     html = parser.parse("""
 input(type='number', value=6)
 """)
 
-    expect(html).to.equal('<input type="number" value="6"></input>')
+    expect(html).to.equal('<input type="number" value="6" />')
   
   def test_it_should_handle_bool_attributes(self):
     html = parser.parse("""
@@ -67,15 +68,15 @@ form
   input.control(required=True, disabled=false, shortcut)
 """)
 
-    expect(html).to.equal('<form><input required shortcut class="control"></input></form>')
+    expect(html).to.equal('<form><input required shortcut class="control" /></form>')
 
   def test_it_should_leave_expressions_intact(self):
     html = parser.parse("""
-ul.sidebar(class='{{sidebar_classname}}')
+ul.sidebar(class='{{ sidebar_classname | upper }}')
   {% for link in links %}
   li
     a(href='/{{link}}') {{link}}
   {% endfor %}
 """)
 
-    expect(html).to.equal('<ul class="sidebar {{sidebar_classname}}">{% for link in links %}<li><a href="/{{link}}">{{link}}</a></li>{% endfor %}</ul>')
+    expect(html).to.equal('<ul class="sidebar {{ sidebar_classname | upper }}">\n{% for link in links %}\n<li><a href="/{{link}}">{{link}}</a></li>\n{% endfor %}\n</ul>')
