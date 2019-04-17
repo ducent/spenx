@@ -27,7 +27,7 @@ root = (empty_line / multiline_string / expression / definition)+ EOF
 
 EOL = r'\\n|\\r\\n'
 indent = r'\s+'
-spaces = r'[ ]*'
+spaces = r'[ \t]*'
 empty_line = spaces EOL
 
 text = r'[^\\n\\r]*'

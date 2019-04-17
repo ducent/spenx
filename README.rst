@@ -13,11 +13,11 @@ spenx |travis| |cover| |pypi| |license|
 .. |license| image:: https://img.shields.io/badge/License-GPL%20v3-blue.svg
     :target: https://www.gnu.org/licenses/gpl-3.0
 
-Tiny template parser which will convert a `pugjs <https://github.com/kakulukia/pypugjs>`_ like syntax to HTML with the help of popular template engine (Jinja2 only at the time being).
+Tiny template parser which will convert a `pugjs <https://github.com/kakulukia/pypugjs>`_ like syntax to HTML with the help of popular template engines.
 
 In spenx, statements, like conditions and loops, are not processed and outputted "as it" to be processed by the template engine you wish to use.
 
-At the time being, only Jinja2 and Mako has been tested but adding support for anything else should be easy.
+At the time being, only **Jinja2** and **Mako** has been tested but adding support for anything else should be easy.
 
 Why another parser?
 -------------------
@@ -66,7 +66,11 @@ Using spenx is fairly easy:
 
   # Using mako
   from spenx.ext.mako import preprocessor
-  mako.template.Template("p Hello world", preprocessor=preprocessor)
+  from mako.template import Template
+
+  tpl = Template("p Hello world", preprocessor=preprocessor)
+
+  # And use render as usual
 
 Syntax
 ------
