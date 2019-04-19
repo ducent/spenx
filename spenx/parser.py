@@ -48,7 +48,7 @@ expression = %s
 multiline_string = indent? "| " text EOL
 """ % (statement_expression), 'root', skipws=False)
 
-  def parse(self, source):
+  def parse(self, source, file_name=None):
     """Parse the given input and returns the generated HTML.
 
     Args:

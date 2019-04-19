@@ -62,6 +62,9 @@ Using spenx is fairly easy:
     extensions=[Spenx], # And the spenx extension
   )
 
+  # Only preprocess files with given extensions
+  env.spenx_process_extensions = ['.pug', '.spenx'] # Those are the default
+
   # And use env.get_template and render as usual
 
   # Using mako
@@ -130,3 +133,11 @@ And after using BeautifulSoup:
     </div>
   </body>
   </html>
+
+Testing
+-------
+
+.. code-block:: bash
+
+  $ pip install -e .[test]
+  $ python -m nose --with-doctest -v --with-coverage --cover-package=spenx
