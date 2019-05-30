@@ -65,10 +65,10 @@ input(type='number', value=6)
   def test_it_should_handle_bool_attributes(self):
     html = parser.parse("""
 form
-  input.control(required=True, disabled=false, shortcut)
+  input.control(required=True, disabled=false, shortcut, id='someid')
 """)
 
-    expect(html).to.equal('<form><input required shortcut class="control" /></form>')
+    expect(html).to.equal('<form><input required shortcut id="someid" class="control" /></form>')
 
   def test_it_should_leave_expressions_intact(self):
     html = parser.parse("""
@@ -80,3 +80,10 @@ ul.sidebar(class='{{ sidebar_classname | upper }}')
 """)
 
     expect(html).to.equal('<ul class="sidebar {{ sidebar_classname | upper }}">\n{% for link in links %}\n<li><a href="/{{link}}">{{link}}</a></li>\n{% endfor %}\n</ul>')
+
+  def test_it_should_handle_empty_attributes(self):
+    html = parser.parse("""
+form(action='', method='post')
+""")
+
+    expect(html).to.equal('<form action="" method="post" />')

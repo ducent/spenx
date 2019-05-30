@@ -35,9 +35,9 @@ id = r'#[^. \\n\\r(]+'
 class = r'\.[^#. \\n\\r(]+'
 tag = r'[^ \\n\\r.#(]+'
 
-attribute_name = r'[^=)]+'
+attribute_name = r'[^=),]+'
 bool = r'true|false|True|False'
-string = r"'.+?'|`.+?`"
+string = r"'.*?'|`.*?`"
 number = r'[\d.]+'
 attribute_value = (bool / string / number)
 attribute = spaces EOL? spaces attribute_name r'=?' attribute_value? spaces r',?' spaces EOL?
