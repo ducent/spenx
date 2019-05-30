@@ -15,6 +15,8 @@ spenx |travis| |cover| |pypi| |license|
 
 Tiny template parser which will convert a `pugjs <https://github.com/kakulukia/pypugjs>`_ like syntax to HTML with the help of popular template engines.
 
+**spenx** is not a direct port of the javascript pugjs library but has been heavily influenced by it so don't expect full pugjs features to work. That being said, if you need to add a feature, don't hesitate to submit your pull requests or open an issue!
+
 In spenx, statements, like conditions and loops, are not processed and outputted "as it" to be processed by the template engine you wish to use.
 
 At the time being, only **Jinja2** and **Mako** has been tested but adding support for anything else should be easy.
@@ -81,6 +83,12 @@ Syntax
 If you're already using pugjs, you should feel familiar with the syntax (see the `tests/` folder for more insights).
 
 *For the moment, you should use the multiline string to handle the doctype but that may change in the future.*
+
+Valid attributes values are:
+
+- strings, enclosed in `'` or `\`` (`type='text'`)
+- booleans (`required=True`)
+- numbers (`value=42.0`)
 
 .. code-block:: text
 
