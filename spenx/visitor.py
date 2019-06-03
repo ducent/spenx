@@ -79,9 +79,9 @@ class HtmlVisitor(PTNodeVisitor):
 
   def _handle_close_and_self_closing(self, children):
     yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
-    # This one is a bit tricky! We have match a multiline string so we want to
-    # make sure the last remining tag (the parent one) will let know others it has at least one child
-    # now so the closing tag will match correctly.
+    # This one is a bit tricky! We have match a specific item (such as multiline, expression, ...)
+    # so we want to make sure the last remaining tag (the parent one) will let know others
+    # it has at least one child now so the closing tag will match correctly.
     if self._tag_stack:
       self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
 
@@ -135,6 +135,10 @@ class HtmlVisitor(PTNodeVisitor):
 
     # Expression are left untouched, just dismiss indents and EOL
     yield '\n%s\n' % ''.join([n.value for n in node if n.rule_name not in ['indent', 'EOL']])
+
+  def visit_html(self, node, children):
+    yield from self._handle_close_and_self_closing(children)
+    yield '<%s>' % children.html_tag[0]
 
   def visit_definition(self, node, children):
     indent = children.indent[0] if children.indent else 0

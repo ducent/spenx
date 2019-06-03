@@ -41,6 +41,17 @@ body
 """)
     expect(html).to.equal('<body><p>Hello, world!</p><p>Hello again</p></body>')
 
+  def test_it_should_handle_raw_html(self):
+    html = parser.parse("""
+<!doctype html>
+body
+  <div class="raw">
+    p Hello, world!
+  </div>
+""")
+
+    expect(html).to.equal('<!doctype html><body><div class="raw"><p>Hello, world!</p></div></body>')
+
   def test_it_should_handle_id_and_classes_with_shortcuts(self):
     html = parser.parse("""
 div#content.wrapper.container

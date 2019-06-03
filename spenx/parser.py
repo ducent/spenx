@@ -23,7 +23,7 @@ class Parser(ParserPEG):
     """
 
     super().__init__("""
-root = (empty_line / multiline_string / expression / silent_comment / comment / definition)+ EOF
+root = (empty_line / multiline_string / expression / silent_comment / comment / html / definition)+ EOF
 
 EOL = r'\\n|\\r\\n'
 indent = r'\s+'
@@ -48,6 +48,9 @@ comment = (indent? comment_line)+
 
 silent_comment_line = "//-" text EOL?
 silent_comment = (indent? silent_comment_line)+
+
+html_tag = r'[^>]*'
+html = indent? "<" html_tag ">" EOL?
 
 definition = indent? tag? (id / class)* attributes? r'[ ]?' text? EOL?
 expression = %s

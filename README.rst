@@ -82,8 +82,6 @@ Syntax
 
 If you're already using pugjs, you should feel familiar with the syntax (see the `tests/` folder for more insights).
 
-*For the moment, you should use the multiline string to handle the doctype but that may change in the future.*
-
 Valid attributes values are:
 
 - strings, enclosed in `'` or `\`` (`type='text'`)
@@ -92,7 +90,7 @@ Valid attributes values are:
 
 .. code-block:: text
 
-  | <!DOCTYPE html>
+  <!DOCTYPE html>
   html(lang='en')
     head
       meta(charset='utf-8')
