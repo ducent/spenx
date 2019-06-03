@@ -77,6 +77,14 @@ class HtmlVisitor(PTNodeVisitor):
       else:
         break
 
+  def _handle_close_and_self_closing(self, children):
+    yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
+    # This one is a bit tricky! We have match a multiline string so we want to
+    # make sure the last remining tag (the parent one) will let know others it has at least one child
+    # now so the closing tag will match correctly.
+    if self._tag_stack:
+      self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
+
   def visit_attributes(self, node, children):
     return children.attribute
 
@@ -108,20 +116,23 @@ class HtmlVisitor(PTNodeVisitor):
   def visit_empty_line(self, node, children):
     return None
 
+  def visit_comment_line(self, node, children):
+    return children.text[0]
+
+  def visit_silent_comment(self, node, children):
+    return None
+
   def visit_multiline_string(self, node, children):
-    yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
-    # This one is a bit tricky! We have match a multiline string so we want to
-    # make sure the last remining tag (the parent one) will let know others it has at least one child
-    # now so the closing tag will match correctly.
-    if self._tag_stack:
-      self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
+    yield from self._handle_close_and_self_closing(children)
     yield children.text[0]
 
+  def visit_comment(self, node, children):
+    yield from self._handle_close_and_self_closing(children)
+    yield '<!--%s-->' % ''.join(children.comment_line)
+
   def visit_expression(self, node, children):
-    yield from self._close_parent_tags(children.indent[0] if children.indent else 0)
-    # Same as multiline string, especially when an expression is the last member
-    if self._tag_stack:
-      self._tag_stack[-1] = self._tag_stack[-1][:-1] + (True, )
+    yield from self._handle_close_and_self_closing(children)
+
     # Expression are left untouched, just dismiss indents and EOL
     yield '\n%s\n' % ''.join([n.value for n in node if n.rule_name not in ['indent', 'EOL']])
 

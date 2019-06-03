@@ -23,7 +23,7 @@ class Parser(ParserPEG):
     """
 
     super().__init__("""
-root = (empty_line / multiline_string / expression / definition)+ EOF
+root = (empty_line / multiline_string / expression / silent_comment / comment / definition)+ EOF
 
 EOL = r'\\n|\\r\\n'
 indent = r'\s+'
@@ -35,13 +35,19 @@ id = r'#[^. \\n\\r(]+'
 class = r'\.[^#. \\n\\r(]+'
 tag = r'[^ \\n\\r.#(]+'
 
-attribute_name = r'[^=),]+'
+attribute_name = r'[^=), ]+'
 bool = r'true|false|True|False'
 string = r"'.*?'|`.*?`"
 number = r'[\d.]+'
 attribute_value = (bool / string / number)
 attribute = spaces EOL? spaces attribute_name r'=?' attribute_value? spaces r',?' spaces EOL?
 attributes = "(" attribute+ ")"
+
+comment_line = "//" text EOL?
+comment = (indent? comment_line)+
+
+silent_comment_line = "//-" text EOL?
+silent_comment = (indent? silent_comment_line)+
 
 definition = indent? tag? (id / class)* attributes? r'[ ]?' text? EOL?
 expression = %s

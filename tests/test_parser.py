@@ -18,6 +18,29 @@ body
 
     expect(html).to.equal('<body><p><a><small>With some text</small><img /></a></p><footer><p>The footer</p></footer></body>')
 
+  def test_it_should_handle_comments(self):
+    html = parser.parse("""
+body
+  // A comment
+  div
+    p Hello, world!
+  // A comment on
+  // multiple lines
+  p Hello again
+""")
+
+    expect(html).to.equal('<body><!-- A comment--><div><p>Hello, world!</p></div><!-- A comment on multiple lines--><p>Hello again</p></body>')
+
+  def test_it_should_handle_silent_comments(self):
+    html = parser.parse("""
+body
+  //- A silent comment
+  p Hello, world!
+  //- This comment should not be outputted either
+  p Hello again
+""")
+    expect(html).to.equal('<body><p>Hello, world!</p><p>Hello again</p></body>')
+
   def test_it_should_handle_id_and_classes_with_shortcuts(self):
     html = parser.parse("""
 div#content.wrapper.container
